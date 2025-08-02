@@ -1,0 +1,44 @@
+{
+  "_class_name": "Conv3DAwareUNet",
+  "_diffusers_version": "0.22.0.dev0",
+  "act_fn": "silu",
+  "add_attention": true,
+  "attention_head_dim": 8,
+  "attn_norm_num_groups": null,
+  "block_out_channels": [
+    128,
+    256,
+    512
+  ],
+  "center_input_sample": false,
+  "class_embed_type": null,
+  "down_block_types": [
+    "Conv3DAwareDownBlock2D",
+    "Conv3DAwareDownBlock2D",
+    "Conv3DAwareDownBlock2D"
+  ],
+  "downsample_padding": 1,
+  "downsample_type": "conv",
+  "dropout": 0.0,
+  "flip_sin_to_cos": true,
+  "freq_shift": 0,
+  "in_channels": 12,
+  "layers_per_block": 2,
+  "mid_block_scale_factor": 1,
+  "norm_eps": 1e-05,
+  "norm_num_groups": 32,
+  "num_class_embeds": null,
+  "out_channels": 2,
+  "resnet_time_scale_shift": "default",
+  "sample_size": [
+    32,
+    96
+  ],
+  "time_embedding_type": "positional",
+  "up_block_types": [
+    "Conv3DAwareUpBlock2D",
+    "Conv3DAwareUpBlock2D",
+    "Conv3DAwareUpBlock2D"
+  ],
+  "upsample_type": "conv"
+}

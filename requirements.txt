@@ -1,0 +1,19 @@
+scipy~=1.16.0
+opencv-python==4.11.0.86
+trimesh~=4.6.12
+jsonlines~=4.0.0
+easydict~=1.13
+open3d~=0.19.0
+numpy~=1.26.4
+einops~=0.8.1
+scikit-image~=0.25.2
+huggingface_hub<0.26.0
+transformers~=4.45.1
+accelerate~=1.8.1
+git+https://github.com/facebookresearch/pytorch3d.git@stable
+git+https://github.com/facebookresearch/detectron2.git@b15f64e
+git+https://github.com/apple/ml-depth-pro.git
+git+https://github.com/huggingface/diffusers@dd5a362
+# Optional dependencies for Grounded SAM
+git+https://github.com/pftq/GroundingDINO_Fix.git@313392a
+git+https://github.com/facebookresearch/segment-anything.git@dca509f

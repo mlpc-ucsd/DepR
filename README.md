@@ -1,6 +1,6 @@
 <p align="center">
 
-  <h1 align="center"><a href="https://mlpc-ucsd.github.io/DepR/">DepR</a>: Depth-guided Single-view Reconstruction with Instance-level Diffusion</h1>
+  <h1 align="center"><a href="https://mlpc-ucsd.github.io/DepR/">DepR</a>: Depth Guided Single-view Scene Reconstruction with Instance-level Diffusion</h1>
   <p align="center">
     <a href="https://clarivy.github.io/" target="_blank"><strong>Qingcheng Zhao</strong></a><sup>*,1,&dagger;</sup>
     ·
@@ -57,9 +57,121 @@
 </div>
 
 
-## Codes
+## 🛠️ Environment Setup
+We provide a pre-built Docker image at [zx1239856/depr](https://hub.docker.com/r/zx1239856/depr) based on `PyTorch 2.7.1` and `CUDA 12.6`. You can also build the image locally:
+```bash
+docker build -f Dockerfile . -t depr
+```
 
-Coming soon
+Alternatively, you can install dependencies based on commands listed in [Dockerfile](Dockerfile).
+
+## 🗂️ Dataset Setup
+Please download processed 3D-FRONT dataset from [https://huggingface.co/datasets/zx1239856/DepR-3D-FRONT](https://huggingface.co/datasets/zx1239856/DepR-3D-FRONT). Extract the downloaded files into `datasets/front3d_pifu/data`. The result folder structure should look like
+```
+data/
+|-- metadata/             (Scene metadata)
+|   |-- 0.jsonl
+|   |-- ...
+|-- pickled_data/         (Raw data processed by InstPIFu)
+|   |-- test/
+|       |-- rendertask3000.pkl
+|       |-- ...
+|-- sdf_layout/           (GT layouts)
+|   |-- 10000.npy
+|   |-- ...
+|- 3D-FUTURE-watertight/  (GT meshes, required for evaluation)
+|   |-- 0004ae9a-1d27-4dbd-8416-879e9de1de8d/
+|       |-- raw_watertight.obj
+|       |-- ...
+|-- instpifu_mask/        (Instance masks provided by InstPIFu)
+|-- panoptic/             (Panoptic segmentation maps we rendered)
+|-- img/                  (Optional, can be extracted from pickled data)
+|-- depth/depth_pro/      (Optional)
+`-- grounded_sam/         (Optional)
+```
+
+Alternatively, you may generate depth / segmentation yourself based on instructions below.
+<details>
+<summary><b>Generate Segmentation</b></summary>
+
+Please prepare [Grounded SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) weights in `checkpoint/grounded_sam`.
+```
+grounded_sam/
+|-- GroundingDINO_SwinB.py
+|-- groundingdino_swinb_cogcoor.pth
+|-- groundingdino_swint_ogc.pth
+`-- sam_vit_h_4b8939.pth
+```
+
+```bash
+python -m scripts.run_grounded_sam
+```
+</details>
+
+<details>
+<summary><b>Generate Depth</b></summary>
+
+Please put [Depth Pro](https://github.com/apple/ml-depth-pro) weights in `checkpoint/`.
+
+```bash
+python -m scripts.run_depth_pro --output depth_pro
+```
+
+</details>
+
+## 📊 Inference
+Please download our weights from [https://huggingface.co/zx1239856/DepR](https://huggingface.co/zx1239856/DepR) and put everything in the `checkpoint` folder.
+
+### 🚀 Demo
+We provide a [demo.ipynb](./demo.ipynb) notebook for inference demo on real-world images.
+
+<details open>
+<summary><b>Object-level Evaluation</b></summary>
+
+You may change 8 to the actual number of GPUs as needed.
+
+```bash
+bash launch.sh 8 all
+```
+</details>
+
+<details>
+<summary><b>(Optional) Guided Sampling</b></summary>
+
+```bash
+bash launch.sh 8 all --guided
+```
+</details>
+
+<details open>
+<summary><b>Scene-level Evaluation</b></summary>
+
+```bash
+# Generate shapes
+bash launch.sh 8 sample --metadata datasets/front3d_pifu/meta/test_scene.jsonl --use-sam
+
+# Layout optim
+bash launch.sh 8 scene --use-sam
+
+# Prepare GT scene
+python -m scripts.build_gt --out-dir output/gt
+
+# Calculate scene-level CD/F1
+accelerate launch --num_processes=8 --multi_gpu -m scripts.eval_scene --gt-pcd-dir output/gt/pcds --pred-dir output/infer/sam_3dproj_attn_dino_c9_augdep_augmask_nocfg_model_0074999/ --save-dir output/evaluation/results --method depr
+```
+</details>
+
+## 🏷️ License
+This repository is released under the [CC-BY-SA 4.0](LICENSE) license. 
+
+## 🙏 Acknowledgement
+Our framework utilizes pre-trained models including [Grounded-Segment-Anything](https://github.com/IDEA-Research/Grounded-Segment-Anything), [Depth Pro](https://github.com/apple/ml-depth-pro), and [DINO v2](https://github.com/facebookresearch/dinov2).
+
+Our code is built upon [diffusers](https://github.com/huggingface/diffusers), [Uni-3D](https://github.com/mlpc-ucsd/Uni-3D), and [BlockFusion](https://github.com/Tencent/BlockFusion).
+
+We use physically based renderings of [3D-FRONT](https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset) scenes provided by [InstPIFu](https://github.com/GAP-LAB-CUHK-SZ/InstPIFu). Additionally, we rendered panoptic segmentation maps ourselves.
+
+We thank all these authors for their nicely open sourced code/datasets and their great contributions to the community.
 
 ## 📝 Citation
 If you find our work useful, please consider citing:
