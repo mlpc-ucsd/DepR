@@ -48,6 +48,8 @@
 <h3 align="center">
   <a href="https://mlpc-ucsd.github.io/DepR/"><strong>Project Page</strong></a>
   |
+  <a href="https://openaccess.thecvf.com/content/ICCV2025/papers/Zhao_DepR_Depth_Guided_Single-view_Scene_Reconstruction_with_Instance-level_Diffusion_ICCV_2025_paper.pdf">Paper</a>
+  |
   <a href="https://arxiv.org/abs/2507.22825"><strong>arXiv</strong></a>
 </h3>
 
@@ -176,13 +178,12 @@ We thank all these authors for their nicely open sourced code/datasets and their
 ## 📝 Citation
 If you find our work useful, please consider citing:
 ```bibtex
-@misc{zhao2025deprdepthguidedsingleview,
-    title={DepR: Depth Guided Single-view Scene Reconstruction with Instance-level Diffusion}, 
-    author={Qingcheng Zhao and Xiang Zhang and Haiyang Xu and Zeyuan Chen and Jianwen Xie and Yuan Gao and Zhuowen Tu},
-    year={2025},
-    eprint={2507.22825},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV},
-    url={https://arxiv.org/abs/2507.22825},
+@InProceedings{Zhao_2025_ICCV_DepR,
+    author    = {Zhao, Qingcheng and Zhang, Xiang and Xu, Haiyang and Chen, Zeyuan and Xie, Jianwen and Gao, Yuan and Tu, Zhuowen},
+    title     = {DepR: Depth Guided Single-view Scene Reconstruction with Instance-level Diffusion},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2025},
+    pages     = {5722-5733}
 }
 ```
